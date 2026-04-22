@@ -1,0 +1,367 @@
+package data
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+
+	"github.com/amirrajj-dev/taskio/internal/models"
+	"github.com/google/uuid"
+)
+
+var Users = []models.User{
+	{
+		ID:        uuid.New(),
+		Email:     "john.doe@example.com",
+		Password:  "password123",
+		FullName:  "John Doe",
+		ImageUrl:  "https://example.com/images/john.jpg",
+		Gender:    "male",
+		LastLogin: time.Now().Add(-24 * time.Hour),
+		CreatedAt: time.Now().Add(-30 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-7 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "jane.smith@example.com",
+		Password:  "securepass456",
+		FullName:  "Jane Smith",
+		ImageUrl:  "https://example.com/images/jane.jpg",
+		Gender:    "female",
+		LastLogin: time.Now().Add(-12 * time.Hour),
+		CreatedAt: time.Now().Add(-60 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-1 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "alex.wilson@example.com",
+		Password:  "alexpass789",
+		FullName:  "Alex Wilson",
+		ImageUrl:  "https://example.com/images/alex.jpg",
+		Gender:    "male",
+		LastLogin: time.Now().Add(-6 * time.Hour),
+		CreatedAt: time.Now().Add(-45 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-3 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "sarah.jones@example.com",
+		Password:  "sarahpass321",
+		FullName:  "Sarah Jones",
+		ImageUrl:  "https://example.com/images/sarah.jpg",
+		Gender:    "female",
+		LastLogin: time.Now().Add(-48 * time.Hour),
+		CreatedAt: time.Now().Add(-90 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-14 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "mike.brown@example.com",
+		Password:  "mikepass654",
+		FullName:  "Mike Brown",
+		ImageUrl:  "https://example.com/images/mike.jpg",
+		Gender:    "male",
+		LastLogin: time.Now().Add(-72 * time.Hour),
+		CreatedAt: time.Now().Add(-120 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-21 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "emily.davis@example.com",
+		Password:  "emilypass987",
+		FullName:  "Emily Davis",
+		ImageUrl:  "https://example.com/images/emily.jpg",
+		Gender:    "female",
+		LastLogin: time.Now().Add(-2 * time.Hour),
+		CreatedAt: time.Now().Add(-15 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-2 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "david.miller@example.com",
+		Password:  "davidpass123",
+		FullName:  "David Miller",
+		ImageUrl:  "https://example.com/images/david.jpg",
+		Gender:    "male",
+		LastLogin: time.Now().Add(-36 * time.Hour),
+		CreatedAt: time.Now().Add(-75 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-10 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "lisa.taylor@example.com",
+		Password:  "lisapass456",
+		FullName:  "Lisa Taylor",
+		ImageUrl:  "https://example.com/images/lisa.jpg",
+		Gender:    "female",
+		LastLogin: time.Now().Add(-5 * time.Hour),
+		CreatedAt: time.Now().Add(-50 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-5 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "robert.clark@example.com",
+		Password:  "robertpass789",
+		FullName:  "Robert Clark",
+		ImageUrl:  "https://example.com/images/robert.jpg",
+		Gender:    "male",
+		LastLogin: time.Now().Add(-96 * time.Hour),
+		CreatedAt: time.Now().Add(-180 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-30 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "amanda.white@example.com",
+		Password:  "amandapass321",
+		FullName:  "Amanda White",
+		ImageUrl:  "https://example.com/images/amanda.jpg",
+		Gender:    "female",
+		LastLogin: time.Now().Add(-1 * time.Hour),
+		CreatedAt: time.Now().Add(-25 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-1 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "thomas.moore@example.com",
+		Password:  "thomaspass654",
+		FullName:  "Thomas Moore",
+		ImageUrl:  "https://example.com/images/thomas.jpg",
+		Gender:    "male",
+		LastLogin: time.Now().Add(-18 * time.Hour),
+		CreatedAt: time.Now().Add(-100 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-15 * 24 * time.Hour),
+	},
+	{
+		ID:        uuid.New(),
+		Email:     "olivia.hall@example.com",
+		Password:  "oliviapass987",
+		FullName:  "Olivia Hall",
+		ImageUrl:  "https://example.com/images/olivia.jpg",
+		Gender:    "female",
+		LastLogin: time.Now().Add(-3 * time.Hour),
+		CreatedAt: time.Now().Add(-40 * 24 * time.Hour),
+		UpdatedAt: time.Now().Add(-4 * 24 * time.Hour),
+	},
+}
+
+
+var Organizations = []models.Organization{
+	{
+		ID: uuid.New(),
+		Name: generateOrgName(),
+		OwnerID: Users[0].ID,
+		CreatedAt: time.Now().Add(-100 * 24 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		Name: generateOrgName(),
+		OwnerID: Users[1].ID,
+		CreatedAt: time.Now().Add(-40 * 24 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		Name: generateOrgName(),
+		OwnerID: Users[2].ID,
+		CreatedAt: time.Now().Add(-25 * 24 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		Name: generateOrgName(),
+		OwnerID: Users[3].ID,
+		CreatedAt: time.Now().Add(-15 * 24 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		Name: generateOrgName(),
+		OwnerID: Users[7].ID,
+		CreatedAt: time.Now().Add(-5 * 24 * time.Hour),
+	},
+}
+
+
+var OrganizationUsers = []models.OrganizationUser{
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[0].ID,
+		UserID: Users[0].ID,
+		Role: "owner",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[0].ID,
+		UserID: Users[1].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[0].ID,
+		UserID: Users[2].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[1].ID,
+		UserID: Users[3].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[1].ID,
+		UserID: Users[4].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[1].ID,
+		UserID: Users[5].ID,
+		Role: "owner",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[2].ID,
+		UserID: Users[6].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[2].ID,
+		UserID: Users[7].ID,
+		Role: "owner",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[2].ID,
+		UserID: Users[8].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[3].ID,
+		UserID: Users[9].ID,
+		Role: "owner",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[3].ID,
+		UserID: Users[10].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[3].ID,
+		UserID: Users[11].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[4].ID,
+		UserID: Users[1].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[4].ID,
+		UserID: Users[4].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[4].ID,
+		UserID: Users[7].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[0].ID,
+		UserID: Users[10].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[1].ID,
+		UserID: Users[6].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[2].ID,
+		UserID: Users[8].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[3].ID,
+		UserID: Users[0].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[4].ID,
+		UserID: Users[5].ID,
+		Role: "owner",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[0].ID,
+		UserID: Users[4].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[1].ID,
+		UserID: Users[1].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[2].ID,
+		UserID: Users[10].ID,
+		Role: "admin",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[3].ID,
+		UserID: Users[9].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+	{
+		ID: uuid.New(),
+		OrgID: Organizations[4].ID,
+		UserID: Users[11].ID,
+		Role: "member",
+		JoinedAt: time.Now().Add(-5 * time.Hour),
+	},
+}
+
+func generateOrgName() string {
+	prefixes := []string{"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Omega", "Nova", "Apex", "Zenith"}
+	suffixes := []string{"Solutions", "Industries", "Group", "Corp", "Labs", "Tech", "Systems", "Dynamics", "Ventures", "Enterprises"}
+	if rand.Intn(2) == 0 {
+		return fmt.Sprintf("%s %s", prefixes[rand.Intn(len(prefixes))], suffixes[rand.Intn(len(suffixes))])
+	}
+	return fmt.Sprintf("%s %s", suffixes[rand.Intn(len(suffixes))], prefixes[rand.Intn(len(prefixes))])
+}

@@ -1,0 +1,68 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+taskio
+*.test
+*.out
+
+# Go workspace
+go.work
+go.work.sum
+
+# Environment files
+.env
+.env.*
+!.env.example
+.env.dev
+.env.prod
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Dependencies
+vendor/
+
+# Generated files
+tmp/
+*.tmp
+*.temp
+
+# Air hot reload
+tmp/
+
+# Build artifacts
+dist/
+bin/
+build/
+
+# Test coverage
+*.out
+*.cov
+coverage.html
+
+# Docker
+*.pid
+
+# Redis dump
+dump.rdb
+
+# Postgres
+*.pgdata
+
+# Debug
+__debug_bin

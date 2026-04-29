@@ -12,7 +12,7 @@ func RegisterActivityRoutes(r *gin.Engine){
 	repositories.NewActivityRepository()
 	services.NewActivityService()
 	handler := handlers.NewActivityHandler()
-	activityGroup := r.Group("/api/activity")
+	activityGroup := r.Group("/api/activities")
 	activityGroup.Use(middlewares.AuthMiddleware())
 	{
 		activityGroup.GET("" , handler.GetActivities)

@@ -58,8 +58,10 @@ func LoadConfig() {
 	if envFile == "" {
 		envFile = ".env.dev"
 	}
-	if err := godotenv.Load(envFile); err != nil {
-		log.Fatalf("no .env file found: %v", err)
+	// In Docker/production, environment variables may be injected directly
+	// and an env file may not exist inside the container filesystem.
+	if err := godotenv.Load(envFile); err != nil && !os.IsNotExist(err) {
+		log.Printf("warning: failed to load env file %s: %v", envFile, err)
 	}
 	registerHours, _ := strconv.Atoi(getEnv("JWT_EXPIRY_HOURS_REGISTER", "15"))
 	loginHours, _ := strconv.Atoi(getEnv("JWT_EXPIRY_HOURS_LOGIN", "7"))

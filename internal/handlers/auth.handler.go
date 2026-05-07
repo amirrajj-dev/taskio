@@ -1,12 +1,13 @@
 package handlers
 
 import (
+	stdErrors "errors"
 	"log"
 	"net/http"
 
 	"github.com/amirrajj-dev/taskio/internal/configs"
 	"github.com/amirrajj-dev/taskio/internal/dtos"
-	"github.com/amirrajj-dev/taskio/internal/errors"
+	appErr "github.com/amirrajj-dev/taskio/internal/errors"
 	"github.com/amirrajj-dev/taskio/internal/events"
 	"github.com/amirrajj-dev/taskio/internal/helpers"
 	"github.com/amirrajj-dev/taskio/internal/infrastructure/queue"
@@ -49,7 +50,11 @@ func (h *AuthHandler) Register(c *gin.Context) {
 	}
 	createdUser, token, err := h.authService.Register(c.Request.Context(), req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.NewBasicError(err.Error(), c.Request.URL.Path))
+		if err.Error() == "user already exists" {
+			c.JSON(http.StatusConflict, appErr.NewBasicError("user already exists", c.Request.URL.Path))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, appErr.NewBasicError(err.Error(), c.Request.URL.Path))
 		return
 	}
 	var isSecure bool
@@ -93,7 +98,11 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	}
 	user, token, err := h.authService.Login(c, req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.NewBasicError(err.Error(), c.Request.URL.Path))
+		if err.Error() == "invalid credentials" || stdErrors.Is(err, appErr.ErrUserNotFound) {
+			c.JSON(http.StatusUnauthorized, appErr.NewBasicError("invalid credentials", c.Request.URL.Path))
+			return
+		}
+		c.JSON(http.StatusInternalServerError, appErr.NewBasicError(err.Error(), c.Request.URL.Path))
 		return
 	}
 	var isSecure bool
@@ -129,12 +138,12 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	userID, exists := utils.GetUserIDFromContext(c)
 	if !exists {
-		c.JSON(http.StatusUnauthorized, errors.NewBasicError("unautorized", c.Request.URL.Path))
+		c.JSON(http.StatusUnauthorized, appErr.NewBasicError("unautorized", c.Request.URL.Path))
 		return
 	}
 	refreshToken, err := h.authService.RefreshToken(c.Request.Context(), *userID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, errors.NewBasicError(err.Error(), c.Request.URL.Path))
+		c.JSON(http.StatusInternalServerError, appErr.NewBasicError(err.Error(), c.Request.URL.Path))
 		return
 	}
 	var isSecure bool

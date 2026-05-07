@@ -119,7 +119,7 @@ func (h *ProjectHandler) GetProject(c *gin.Context){
 	projectID , parseProjectIdErr := uuid.Parse(strings.TrimSpace(c.Param("projectId")))
 
 	if parseProjectIdErr != nil {
-		c.JSON(http.StatusInternalServerError , errors.NewBasicError("project id parse error" , c.Request.URL.Path))
+		c.JSON(http.StatusBadRequest , errors.NewBasicError("invalid project id" , c.Request.URL.Path))
 		return
 	}
 
@@ -152,7 +152,7 @@ func (h *ProjectHandler) UpdateProject(c *gin.Context) {
 	userID, _ := utils.GetUserIDFromContext(c)
 	projectID , parseProjectIdErr := uuid.Parse(strings.TrimSpace(c.Param("projectId")))
 	if parseProjectIdErr != nil {
-		c.JSON(http.StatusInternalServerError , errors.NewBasicError("invalid project id" , c.Request.URL.Path))
+		c.JSON(http.StatusBadRequest , errors.NewBasicError("invalid project id" , c.Request.URL.Path))
 		return
 	}
 	var req dtos.UpdateProjectRequest
@@ -192,7 +192,7 @@ func (h *ProjectHandler) DeleteProject(c *gin.Context) {
 	userID, _ := utils.GetUserIDFromContext(c)
 	projectID , parseProjectIdErr := uuid.Parse(strings.TrimSpace(c.Param("projectId")))
 	if parseProjectIdErr != nil {
-		c.JSON(http.StatusInternalServerError , errors.NewBasicError("invalid project id" , c.Request.URL.Path))
+		c.JSON(http.StatusBadRequest , errors.NewBasicError("invalid project id" , c.Request.URL.Path))
 		return
 	}
 	if deleted , err := h.projectService.DeleteProject(c.Request.Context() , projectID , *userID);!deleted {

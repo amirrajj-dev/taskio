@@ -39,7 +39,11 @@ func NewTaskHandler() *TaskHandler {
 // @Failure      500  {object}  errors.BasicError  "Internal server error"
 // @Router       /projects/{projectId}/tasks [post]
 func (h *TaskHandler) CreateTask(c *gin.Context) {
-	projectID, _ := uuid.Parse(strings.TrimSpace(c.Param("projectId")))
+	projectID, parseErr := uuid.Parse(strings.TrimSpace(c.Param("projectId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid project id", c.Request.URL.Path))
+		return
+	}
 	userID, _ := utils.GetUserIDFromContext(c)
 	var req dtos.CreateTaskRequest
 	if !helpers.ShouldBindJSON(c, &req) {
@@ -112,7 +116,11 @@ func (h *TaskHandler) CreateSubTask(c *gin.Context) {
 // @Failure      500  {object}  errors.BasicError  "Internal server error"
 // @Router       /projects/{projectId}/tasks [get]
 func (h *TaskHandler) GetProjectTasks(c *gin.Context) {
-	projectID, _ := uuid.Parse(strings.TrimSpace(c.Param("projectId")))
+	projectID, parseErr := uuid.Parse(strings.TrimSpace(c.Param("projectId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid project id", c.Request.URL.Path))
+		return
+	}
 	tasks, getProjectTasksErr := h.taskService.GetProjectTasks(c.Request.Context(), projectID)
 	if getProjectTasksErr != nil {
 		c.JSON(http.StatusInternalServerError, errors.NewBasicError(getProjectTasksErr.Error(), c.Request.URL.Path))
@@ -136,7 +144,11 @@ func (h *TaskHandler) GetProjectTasks(c *gin.Context) {
 // @Failure      500  {object}  errors.BasicError  "Internal server error"
 // @Router       /tasks/{taskId} [get]
 func (h *TaskHandler) GetTask(c *gin.Context) {
-	taskId, _ := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	taskId, parseErr := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid task id", c.Request.URL.Path))
+		return
+	}
 	task, err := h.taskService.GetTaskByID(c.Request.Context(), taskId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, errors.NewBasicError(err.Error(), c.Request.URL.Path))
@@ -162,7 +174,11 @@ func (h *TaskHandler) GetTask(c *gin.Context) {
 // @Router       /tasks/{taskId} [put]
 func (h *TaskHandler) UpdateTask(c *gin.Context) {
 	userID, _ := utils.GetUserIDFromContext(c)
-	taskID, _ := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	taskID, parseErr := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid task id", c.Request.URL.Path))
+		return
+	}
 	id, exists := c.Get("teamID")
 	if !exists {
 		c.JSON(http.StatusInternalServerError, errors.NewBasicError("something goes wrong", c.Request.URL.Path))
@@ -203,7 +219,11 @@ func (h *TaskHandler) UpdateTask(c *gin.Context) {
 // @Router       /tasks/{taskId} [delete]
 func (h *TaskHandler) DeleteTask(c *gin.Context) {
 	userID, _ := utils.GetUserIDFromContext(c)
-	taskID, _ := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	taskID, parseErr := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid task id", c.Request.URL.Path))
+		return
+	}
 	if deleted, err := h.taskService.DeleteTask(c.Request.Context(), taskID, *userID); !deleted {
 		c.JSON(http.StatusInternalServerError, errors.NewBasicError(err.Error(), c.Request.URL.Path))
 		return
@@ -226,7 +246,11 @@ func (h *TaskHandler) DeleteTask(c *gin.Context) {
 // @Failure      500  {object}  errors.BasicError  "Internal server error"
 // @Router       /tasks/{taskId}/subtasks [get]
 func (h *TaskHandler) GetSubTasks(c *gin.Context) {
-	taskID, _ := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	taskID, parseErr := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid task id", c.Request.URL.Path))
+		return
+	}
 	subTasks, getSubTasksErr := h.taskService.GetSubTasks(c.Request.Context(), taskID)
 	if getSubTasksErr != nil {
 		c.JSON(http.StatusInternalServerError, errors.NewBasicError(getSubTasksErr.Error(), c.Request.URL.Path))

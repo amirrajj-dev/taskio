@@ -46,10 +46,10 @@ func (s *authService) Register(ctx context.Context, dto dtos.RegisterRequest) (*
 	slog.Info("register attempt", "email", dto.Email)
 	now := time.Now().UTC()
 	_, findUserErr := s.authRepo.FindUserByEmail(ctx, dto.Email)
-	if findUserErr != nil {
-		if errors.Is(findUserErr, appErr.ErrUserNotFound) {
-			return nil, nil, appErr.ErrUserNotFound
-		}
+	if findUserErr == nil {
+		return nil, nil, fmt.Errorf("user already exists")
+	}
+	if !errors.Is(findUserErr, appErr.ErrUserNotFound) {
 		return nil, nil, findUserErr
 	}
 

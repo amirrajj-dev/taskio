@@ -51,7 +51,11 @@ func (h *CommentHandler) CreateComment(c *gin.Context) {
 	if validationErr := utils.ValidateRequest(c, req); validationErr != nil {
 		return
 	}
-	taskID, _ := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	taskID, parseErr := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid task id", c.Request.URL.Path))
+		return
+	}
 	createdComment, createErr := h.commentService.CreateComment(c.Request.Context(), taskID, *userID, req.Content)
 	if createErr != nil {
 		c.JSON(http.StatusInternalServerError, errors.NewBasicError(createErr.Error(), c.Request.URL.Path))
@@ -73,7 +77,11 @@ func (h *CommentHandler) CreateComment(c *gin.Context) {
 // @Failure      500  {object}  errors.BasicError  "Internal server error"
 // @Router       /tasks/{taskId}/comments [get]
 func (h *CommentHandler) GetComments(c *gin.Context){
-	taskID, _ := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	taskID, parseErr := uuid.Parse(strings.TrimSpace(c.Param("taskId")))
+	if parseErr != nil {
+		c.JSON(http.StatusBadRequest, errors.NewBasicError("invalid task id", c.Request.URL.Path))
+		return
+	}
 	comments , err := h.commentService.GetTaskComments(c.Request.Context() , taskID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError , errors.NewBasicError(err.Error() , c.Request.URL.Path))
